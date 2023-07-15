@@ -1,0 +1,30 @@
+export let colorSet = {
+    'kr': '#E57373',
+    'en': '#F58FB1',
+    'mt': '#64B5F6',
+    'ch': '#9EA8DB',
+    'li': '#80C783',
+    'lu': '#FFF176',
+    'dn': '#B39DDB',
+    'br': '#DDE776',
+}
+
+export let data = [
+    ['국어 I', '0840', '1023', colorSet.kr],
+    ['휴식 I', '1023', '1030', colorSet.br],
+    ['수학 I', '1030', '1240', colorSet.mt],
+    ['중식', '1240', '1310', colorSet.lu],
+    ['영어 I', '1310', '1430', colorSet.en],
+    ['휴식 II', '1430', '1437', colorSet.br],
+    ['수학 II', '1437', '1528', colorSet.mt],
+    ['휴식 III', '1528', '1535' , colorSet.br],
+    ['화학', '1535', '1655' , colorSet.ch],
+    ['휴식 IV', '1655', '1702' , colorSet.br],
+    ['물리', '1702', '1822' , colorSet.li],
+    ['석식', '1822', '1852' , colorSet.dn],
+    ['수학 III', '1852', '2032' , colorSet.mt],
+    ['휴식 V', '2032', '2039' , colorSet.br],
+    ['국어 II', '2039', '2110' , colorSet.kr],
+    ['휴식 VI', '2110', '2117' , colorSet.br],
+    ['수학 IV', '2117', '2237' , colorSet.mt],
+]
