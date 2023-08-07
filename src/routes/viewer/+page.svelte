@@ -218,6 +218,8 @@
   import { onMount } from "svelte";
   import StatusWidget from "./ui/widget/StatusWidget.svelte";
   import CalendarWidget from "./ui/widget/CalendarWidget.svelte";
+  import PlanWidget from "./ui/widget/PlanWidget.svelte";
+  import TimenessWidget from "./ui/widget/TimenessWidget.svelte";
 
   let booted = false;
 
@@ -285,7 +287,7 @@
     class="w-full min-h-full h-[100vh] flex flex-col justify-center items-center gap-[0.3rem]"
     transition:blur
   >
-    <div
+    <button
       style="background-image: url({boomerangWinter}); background-position: center; background-size: 125%; background-repeat: no-repeat; border-radius: 50%;"
       class="w-[5rem] h-[5rem] cursor-pointer"
       on:click={() => {
@@ -327,9 +329,14 @@
       <div
         class="p-[0.75rem] flex justify-start gap-[0.75rem] h-full min-w-[calc(7rem*4+0.75rem*3)] w-[calc(7rem*4+0.75rem*3)]"
       >
-        <GalleryWidget bind:updateOn bind:updateSignal />
-        <div class="flex flex-row gap-[0.75rem] flex-wrap">
+        <div class="flex flex-col gap-[0.75rem]">
+          <GalleryWidget bind:updateOn bind:updateSignal />
+          <MusicWidget />
+        </div>
+        <div class="flex flex-row gap-[0.75rem] flex-wrap content-start">
           <WeatherWidget />
+          <TimenessWidget />
+
           <CalendarWidget />
 
           <CheckWidgetFrame>
@@ -356,7 +363,7 @@
       <div
         class="p-[0.75rem] flex justify-end gap-[0.75rem] min-w-[calc(7rem*2+0.75rem*3)] w-[calc(7rem*2+0.75rem*3)] flex-wrap"
       >
-        <div class="flex justify-end gap-[0.75rem] flex-wrap">
+        <div class="flex justify-end gap-[0.75rem] flex-wrap content-start">
           <!-- 디데이 위젯 -->
           <DdayWidget />
 
@@ -373,8 +380,9 @@
             bind:updateOn
           />
 
+          <PlanWidget />
+
           <!-- 음악 위젯 -->
-          <MusicWidget />
         </div>
         <div class="flex flex-wrap gap-[0.75rem]">
           <NotifyTime bind:ignoreNotify bind:visible {notifyTarget} {digit} />

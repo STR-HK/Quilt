@@ -539,7 +539,7 @@
     style="border-top-left-radius: 0.675rem; border-top-right-radius: 0.675rem;"
   >
     <div class="flex flex-row items-center gap-[0.4rem] overflow-hidden">
-      <div
+      <button
         class="cursor-pointer thumbnail"
         on:click={() => {
           if (confirm("정말로 재생목록을 삭제하시겠습니까?")) {
@@ -629,7 +629,7 @@
     {#each music as musicId}
       {#if musicId}
         {#await thumbnail(musicId) then result}
-          <div
+          <button
             class="cover"
             style="background-image: url({result.info.thumbnails[0]
               .url}); background-position: center; background-size: cover;"
@@ -651,7 +651,7 @@
         {/await}
       {:else}
         {#await timing() then result}
-          <div
+          <button
             class="cover"
             transition:fade
             on:click={() => {
@@ -665,7 +665,7 @@
             }}
           >
             +
-          </div>
+          </button>
         {/await}
       {/if}
     {/each}

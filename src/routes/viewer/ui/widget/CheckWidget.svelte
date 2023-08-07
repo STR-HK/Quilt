@@ -38,7 +38,7 @@
 </script>
 
 <div
-  class="smallWidget text-xl flex-col flex items-center justify-center gap-[0.2rem]"
+  class="widget smallWidget text-xl flex-col flex items-center justify-center gap-[0.2rem]"
   on:click={status ? kill : call}
 >
   <div

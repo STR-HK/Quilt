@@ -11,6 +11,12 @@
     name="viewport"
     content="viewport-fit=cover, user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
   />
+  <link
+    rel="preload"
+    href="../src/lib/fonts/SF-Pro.woff2"
+    as="font"
+    crossorigin="anonymous"
+  />
 </svelte:head>
 
 <div class="app">

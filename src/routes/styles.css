@@ -28,6 +28,7 @@
 
 }
 
+
 body {
 	min-height: 100vh;
 	margin: 0;
@@ -35,7 +36,7 @@ body {
 	background-color: black;
 	background-size: cover;
 	background-position: center;
-	background-image: url(https://cdn.osxdaily.com/wp-content/uploads/2023/06/macOS-Sonoma-default-wallpaper-Light.jpg);
+	background-image: url('../lib/images/macOS-Sonoma-default-wallpaper-Light.jpg');
 	/* background-image: url(https://media.idownloadblog.com/wp-content/uploads/2021/06/macOS-Monterey-wallpaper-idownloadblog-mattbirchler-variant-2-blue-green-dark.jpg); */
 	/* background-image: url('../lib/images/big-sur.jpg'); */
 	/* scale: 1.75;
@@ -58,7 +59,47 @@ body {
 
     color: white;
     box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+	transition: 0.25s;
   }
+  .widget:hover{
+	scale: 1.015;
+  }
+  .smallWidget:hover{
+	scale: 1.03;
+  }
+  .widget:active:not(:focus):not(:focus-within) {
+	scale: 0.985;
+  
+  }
+  .smallWidget:active{
+	scale: 0.97;
+  }
+  button {
+	transition: 0.25s;
+  }
+  button:hover {
+	scale: 1.03;
+
+  }
+  button:active {
+	scale: 0.97;
+
+  }
+
+  .scaling {
+	transition: 0.25s;
+
+  }
+  .scaling:hover {
+	scale: 1.03;
+
+  }
+  .scaling:active {
+	scale: 0.97;
+
+  }
+
+  
   .widen {
     width: 14.75rem;
 	min-width: 14.75rem;
@@ -67,6 +108,10 @@ body {
   .hiden {
     height: 14.75rem;
 	min-height: 14.75rem;
+  }
+  .hidenTwice {
+	height: 29.5rem;
+	min-height: 29.5rem;
   }
   .notify {
     background-color: #00000050;

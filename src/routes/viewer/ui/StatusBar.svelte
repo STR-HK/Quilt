@@ -20,17 +20,26 @@
     flex flex-row items-center justify-between px-[0.28rem]"
 >
   <div class="flex flex-row items-center font-bold">
-    <div class="status_item">􀜎</div>
-    <div class="status_item">Quilter</div>
+    <button class="status_item">􀜎</button>
+    <button class="status_item">Quilter</button>
   </div>
   <div class="flex flex-row items-center">
     <!-- <div class="status_item">􀛨</div> -->
     <!-- <div class="status_item">􀙇</div> -->
-    <div class="status_item" on:click={() => (showModal = true)}>􀊫</div>
-    <div class="status_item">􀜊</div>
+    <button class="status_item" on:click={() => (showModal = true)}>􀊫</button>
+    <button
+      class="status_item"
+      on:click={() => {
+        let con = confirm("정말로 지역 저장소를 정리하시겠습니까?");
+        if (con) {
+          localStorage.clear();
+          location.reload();
+        }
+      }}>􀜊</button
+    >
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
+    <button
       class="status_item"
       on:click={() => {
         mainScreen = false;
@@ -42,9 +51,9 @@
       }}
     >
       􀆨
-    </div>
-    <div class="status_item">{renderedDate}</div>
-    <div class="status_item">{renderedTime}</div>
+    </button>
+    <button class="status_item">{renderedDate}</button>
+    <button class="status_item">{renderedTime}</button>
   </div>
 </div>
 
@@ -70,6 +79,7 @@
     color: #ffffff;
     border-radius: 0.375rem;
     cursor: pointer;
+    transition: 0.25s;
   }
 
   .status_item:hover {

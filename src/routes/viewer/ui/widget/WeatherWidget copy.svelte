@@ -118,14 +118,11 @@
         bottomColor = cs.bottom;
 
         fetch(
-          `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=daily,minutely,current,alerts&units=metric&appid=${app}`
-          // `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${app}&units=metric`
+          `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${app}&units=metric`
         )
           .then((res) => res.json())
           .then((res) => {
-            let wl = res.hourly;
-            let timezone_offset = res.timezone_offset;
-            // wl = res.hourly;
+            let wl = res.list;
             let cnt = 0;
 
             tempMin = 273.15;
@@ -139,84 +136,47 @@
 
             wl.forEach((weather) => {
               if (cnt < 6) {
-                if (
-                  weather.dt + timezone_offset >
-                  weatherData.dt + weatherData.timezone
-                ) {
+                // console.warn(weatherData);
+                console.log(
+                  `응답생성시간: ${utcFormatDate(
+                    new Date((weatherData.dt + weatherData.timezone) * 1000)
+                  )}`
+                );
+
+                if (weather.dt > weatherData.dt + weatherData.timezone) {
+                  // console.log({
+                  //   f: weather.dt,
+                  //   c: weatherData.dt + weatherData.timezone,
+                  // });
+                  console.warn(`예상시간: ${weather.dt_txt}`);
+                  console.warn(
+                    `예상시간: ${utcFormatDate(
+                      new Date((weather.dt + weatherData.timezone) * 1000)
+                    )}`
+                  );
+
                   forecastArray.push(weather);
+
+                  if (weather.main.temp_min < tempMin) {
+                    tempMin = Math.round(weather.main.temp_min);
+                  }
+
+                  if (weather.main.temp_max > tempMax) {
+                    tempMax = Math.round(weather.main.temp_max);
+                  }
+
                   cnt += 1;
+                } else {
+                  console.error(`예상시간: ${weather.dt_txt}`);
+                  console.error(
+                    `예상시간: ${utcFormatDate(new Date(weather.dt * 1000))}`
+                  );
                 }
               }
             });
 
-            wl.forEach((weather) => {
-              if (weather.temp < tempMin) {
-                tempMin = Math.round(weather.temp);
-              }
-
-              if (weather.temp > tempMax) {
-                tempMax = Math.round(weather.temp);
-              }
-            });
-
-            let len = forecastArray.length;
-
-            let first_forecast = forecastArray[0];
-            let last_forecast = forecastArray[len - 1];
-
-            let forecastArrayDump = forecastArray;
-
-            let sunrised = false;
-            let sunseted = false;
-
-            for (let s = 0; s < len; s++) {
-              let sunriseData = {
-                dt: weatherData.sys.sunrise,
-                temp: forecastArrayDump[s].temp,
-                weather: [
-                  {
-                    main: "Sun",
-                    description: "sunrise",
-                  },
-                ],
-              };
-              let sunsetData = {
-                dt: weatherData.sys.sunset,
-                temp: forecastArrayDump[s].temp,
-                weather: [
-                  {
-                    main: "Sun",
-                    description: "sunset",
-                  },
-                ],
-              };
-
-              let first_time = weatherData.dt + weatherData.timezone;
-              let sunrise_time = weatherData.sys.sunrise + weatherData.timezone;
-              let current_forecast_time =
-                forecastArrayDump[s].dt + timezone_offset;
-              let sunset_time = weatherData.sys.sunset + weatherData.timezone;
-              let last_forecast_time = last_forecast.dt + timezone_offset;
-
-              if (
-                first_time <= sunrise_time &&
-                sunrise_time <= last_forecast_time
-              ) {
-                if (sunrise_time <= current_forecast_time && !sunrised) {
-                  sunrised = true;
-                  forecastArray.splice(s, 0, sunriseData);
-                }
-              }
-
-              if (
-                first_time <= sunset_time &&
-                sunset_time <= last_forecast_time
-              ) {
-                if (sunset_time <= current_forecast_time && !sunseted) {
-                  sunseted = true;
-                  forecastArray.splice(s, 0, sunsetData);
-                }
-              }
+            for (let s = 0; s < forecastArray.length; s++) {
+              console.log(new Date(weatherData.sys.sunrise * 1000).getHours());
             }
           })
           .catch((e) => {
@@ -302,11 +262,11 @@
 
   onMount(() => {
     loadByNameIfExist();
-    setInterval(() => {
-      // console.log("refreshing weather");
-      safeRefreshWeather();
-    }, 1000 * 60 * 5);
   });
+  setInterval(() => {
+    // console.log("refreshing weather");
+    safeRefreshWeather();
+  }, 1000 * 60 * 5);
 
   let weatherNameViewer;
   let bIsEditingName = false;
@@ -381,21 +341,9 @@ background: linear-gradient(180deg, rgb({topColor}) 0%, rgb({middleColor}) 50%, 
     {#each Array(6) as _, idx}
       <div class="flex flex-col items-center text-[0.5rem] gap-[0.15rem]">
         <div class="font-light text-[0.4rem] transtext font-semibold">
-          {#if forecastArray[idx]?.weather[0]?.main !== "Sun"}
-            {new Date(
-              (forecastArray[idx]?.dt + weatherData.timezone) * 1000
-            ).getUTCHours()}시
-          {:else}
-            {`${new Date((forecastArray[idx]?.dt + weatherData.timezone) * 1000)
-              .getUTCHours()
-              .toString()
-              .padStart(2, "0")}:${new Date(
-              (forecastArray[idx]?.dt + weatherData.timezone) * 1000
-            )
-              .getUTCMinutes()
-              .toString()
-              .padStart(2, "0")}`}
-          {/if}
+          {new Date(
+            (forecastArray[idx]?.dt + weatherData.timezone) * 1000
+          ).getUTCHours()}시
         </div>
         <div
           class="text-[0.6rem]"
@@ -414,7 +362,7 @@ background: linear-gradient(180deg, rgb({topColor}) 0%, rgb({middleColor}) 50%, 
           )}
         </div>
         <div class="text-[0.4rem] font-semibold">
-          {Math.round(forecastArray[idx]?.temp)}°
+          {Math.round(forecastArray[idx]?.main?.temp)}°
         </div>
       </div>
     {/each}

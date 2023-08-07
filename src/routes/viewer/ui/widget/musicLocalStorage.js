@@ -43,6 +43,6 @@ export function removeMusicFromLocalStorage(music, musicId) {
         if (storedId !== musicId) newMusic.push(storedId)
         else newMusic.push(null)
     });
-    saveArrayToLocalStorage(music);
+    saveArrayToLocalStorage(newMusic);
     return newMusic
 }

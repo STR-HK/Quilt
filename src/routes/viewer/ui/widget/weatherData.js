@@ -127,9 +127,12 @@ export let weatherDataSample = {
       case 'shower drizzle':
         return "소나기와 이슬비";
         break;
-        // 
       case 'few clouds':
-        return "[N] 구름 조금";
+        if (bIsDay) {
+          return "대체로 맑음";
+        } else {
+          return "대체로 청명함";
+        }
         break;
       case 'scattered clouds':
         return "한때 흐림";
@@ -276,6 +279,15 @@ export let weatherDataSample = {
       }
     } else if (main === "Clouds") {
       return "􀇃";
+    } else if (main === "Sun") {
+      if (desc === 'sunrise') {
+        return '􀆲'
+      } else if (desc === 'sunset') {
+        return '􀆴'
+      } else {
+        return '􀆿'
+      }
+    
     } else if (
       [
         "thunderstorm with light rain",
@@ -367,7 +379,7 @@ export let weatherDataSample = {
   export function getColorByIcon(icon) {
     if (icon === "􀇅") {
       return '99, 206, 250'
-    } else if (icon === "􀆮") {
+    } else if (icon === "􀆮" || icon === "􀆲" || icon === "􀆴") {
       return '255, 213, 11'
     } else if (icon === "􀇟") {
       return '99, 206, 250'
@@ -387,6 +399,8 @@ export let weatherDataSample = {
       return '255, 255, 255'
     }
   }
+
+
  
   export let forecastArraySample = [
     {
@@ -627,9 +641,9 @@ export let weatherDataSample = {
       main === "Thunderstorm" ||
       main === "Drizzle" ||
       main === "Rain" ||
-      main === "Snow" ||
-      main === "Atmosphere" ||
-      main === "Clouds"
+      main === "Snow"
+      // main === "Atmosphere" ||
+      // main === "Clouds"
     ) {
       if (timeState === "dawn") {
         return rainy_dawn;
@@ -656,6 +670,8 @@ export let weatherDataSample = {
     // main === "Clouds"
   }
 
+  let delta = 0
+
   export function calcTimeState(weatherData) {
     // console.log(weatherData);
     let sunrise_time = weatherData?.sys?.sunrise;
@@ -663,9 +679,257 @@ export let weatherDataSample = {
     let sunset_time = weatherData?.sys?.sunset;
     let timezone = weatherData?.timezone;
 
-    let sunrise = new Date((sunrise_time + timezone) * 1000).getUTCHours();
-    let hour = new Date((time + timezone) * 1000).getUTCHours()
-    let sunset = new Date((sunset_time + timezone) * 1000).getUTCHours();
+    
+
+    let sunrise = new Date((sunrise_time + timezone) * 1000).getUTCHours() ;
+      let hour = new Date((time + timezone) * 1000).getUTCHours() + delta
+      let sunset = new Date((sunset_time + timezone) * 1000).getUTCHours() ;
+
+      let beforeSunrise = sunrise - hour
+      let beforeSunset = sunset - hour
+      let afterSunrise = hour - sunrise
+      let afterSunset = hour - sunset
+
+      let isBeforeSunrise = beforeSunrise > 0
+      let isBeforeSunset = beforeSunset > 0
+
+      let targetValue = 0
+
+      // console.log(hour)
+
+      let beforeSetData = {
+        '0': {
+          top: "#2e4777",
+          middle: "#607caa",
+          bottom: "#b0adad",
+        },
+        "1": {
+          top: "#4c74aa",
+          middle: "#4375ac",
+          bottom: "#93aac1",
+        },
+        "2": {
+          top: "#1f4684",
+          middle: "#466fa5",
+          bottom: "#7c9cc5",
+        },
+        "3": {
+          top: "#144585",
+          middle: "#3771a9",
+          bottom: "#5f91c7",
+        },
+        "4": {
+          top: "#204782",
+          middle: "#426da4",
+          bottom: "#668abe",
+        },
+        "5": {
+          top: "#194884",
+          middle: "#326daa",
+          bottom: "#518cc8",
+        },
+        "6": {
+          top: "#194785",
+          middle: "#3170ae",
+          bottom: "#4e8bc8",
+        },
+        "7": {
+          top: "#1f4680",
+          middle: "#406ba6",
+          bottom: "#5b87c2",
+        },
+      }
+
+      let afterSetData = {
+        "0": {
+          top: "#213561",
+          middle: "#5c5f88",
+          bottom: "#9e8381",
+        },
+        "1": {
+          top: "#1f2d4d",
+          middle: "#474b6b",
+          bottom: "#77686f",
+        },
+        "2": {
+          top: "#06071a",
+          middle: "#1e2137",
+          bottom: "#303751",
+        },
+        "3": {
+          top: "#171717",
+          middle: "#1d1f35",
+          bottom: "#2b354e",
+        },
+        "4": {
+          top: "#040416",
+          middle: "#1e2137",
+          bottom: "#2a354e",
+        },
+        "5": {
+          top: "#020116",
+          middle: "#1f213a",
+          bottom: "#27324f",
+        },
+        // ungen (beforeSunrise 4~3)
+        "6": {
+          top: "#010116",
+          middle: "#1e2038",
+          bottom: "#27324e",
+        },
+        "7": {
+          top: "#030314",
+          middle: "#1e2036",
+          bottom: "#28304b",
+        },
+      }
+
+      let beforeSunriseData = {
+        "0": {
+          top: "#18223a",
+          middle: "#2b324f",
+          bottom: "#564d6b",
+        },
+        "1": {
+          top: "#131c33",
+          middle: "#262d4b",
+          bottom: "#4e4867",
+        },
+        "2": {
+          top: "#020214",
+          middle: "#1e2039",
+          bottom: "#293451",
+        },
+        "3": {
+          top: "#030314",
+          middle: "#1e2036",
+          bottom: "#28304b",
+        },
+        "4": {
+          top: "#010116",
+          middle: "#1e2038",
+          bottom: "#27324e",
+        },
+        // ungen (aftersunset 5~3)
+        "5": {
+          top: "#020116",
+          middle: "#1f213a",
+          bottom: "#27324f",
+        },
+        "6": {
+          top: "#040416",
+          middle: "#1e2137",
+          bottom: "#2a354e",
+        },
+        "7": {
+          top: "#171717",
+          middle: "#1d1f35",
+          bottom: "#2b354e",
+        },
+      }
+
+      let afterSunriseData = {
+        "0": {
+          top: "#1d3159",
+          middle: "#5e5f83",
+          bottom: "#8a6a7d",
+        },
+        "1": {
+          top: "#283f6e",
+          middle: "#606b93",
+          bottom: "#938498",
+        },
+        "2": {
+          top: "#1c4882",
+          middle: "#3f72aa",
+          bottom: "#82a2c4",
+        },
+        "3": {
+          top: "#1a4987",
+          middle: "#3e76af",
+          bottom: "#7ca3ca",
+        },
+        "4": {
+          top: "#1c4480",
+          middle: "#436fa8",
+          bottom: "#5e8bc4",
+        },
+        "5": {
+          top: "#1f4680",
+          middle: "#4d76aa",
+          bottom: "#7f9fc6",
+        },
+        "6": {
+          top: "#1e457e",
+          middle: "#406ca6",
+          bottom: "#5c87c1",
+        },
+        "7": {
+          top: "#1e457e",
+          middle: "#406ca6",
+          bottom: "#5c87c1",
+        },
+      }
+
+      function processing(hexCodeSet) {
+        try {
+          let newHexCodeSet = {}
+        Object.keys(hexCodeSet).forEach((key) => {
+          let hexCode = hexCodeSet[key]
+          function hexToRgb(hex) {
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16)
+            } : null;
+          }
+          let rgb = hexToRgb(hexCode)
+          newHexCodeSet[key] = `${rgb.r}, ${rgb.g}, ${rgb.b}`
+        })
+        return newHexCodeSet
+        } catch(e) {
+          return clear_noon
+        }
+      }
+
+      if (isBeforeSunrise) {
+        if (isBeforeSunset) {
+          if (beforeSunrise < beforeSunset) {
+            // console.log(`${hour}시: 일출 ${beforeSunrise}시간 전`)
+            return processing(beforeSunriseData[beforeSunrise])
+          } else {
+            // console.log(`${hour}시: 일몰 ${beforeSunset}시간 전`)
+            return processing(beforeSetData[beforeSunset])
+          }
+        } else {
+          if (beforeSunrise < afterSunset) {
+            // console.log(`${hour}시: 일출 ${beforeSunrise}시간 전`)
+            return processing(beforeSunriseData[beforeSunrise])
+          } else {
+            // console.log(`${hour}시: 일몰 ${afterSunset}시간 후`)
+            return processing(afterSetData[afterSunset])
+          }
+        }
+      } else {
+        if (isBeforeSunset) {
+          if (afterSunrise < beforeSunset) {
+            // console.log(`${hour}시: 일출 ${afterSunrise}시간 후`)
+            return processing(afterSunriseData[afterSunrise])
+          } else {
+            // console.log(`${hour}시: 일몰 ${beforeSunset}시간 전`)
+            return processing(beforeSetData[beforeSunset])
+          }
+        } else {
+          if (afterSunrise < afterSunset) {
+            // console.log(`${hour}시: 일출 ${afterSunrise}시간 후`)
+            return processing(afterSunriseData[afterSunrise])
+          } else {
+            // console.log(`${hour}시: 일몰 ${afterSunset}시간 후`)
+            return processing(afterSetData[afterSunset])
+          }
+        }
+      }
 
     // console.log({
     //   '일출 시작': sunrise - 1,

@@ -5,7 +5,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"special": "vite dev --host 192.168.0.43",
+		"special": "vite dev --host 192.168.0.2",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch"
 	},
@@ -26,7 +26,7 @@
 	"type": "module",
 	"dependencies": {
 		"npm": "^9.8.0",
-		"youtubei.js": "^5.2.1",
+		"youtubei.js": "github:LuanRT/YouTube.js",
 		"yt-dlp-wrap": "^2.3.11"
 	}
 }
